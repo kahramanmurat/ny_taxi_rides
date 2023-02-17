@@ -1,13 +1,19 @@
+
 version: 2
 
 sources:
-  - name: staging
-    database: lucid-volt-375207
-    schema: trips_data_all
+    - name: staging
+      #For bigquery:
+      database: lucid-volt-375207
 
-  tables:
-    - name: green_tripdata_external
-    - name: yellow_tripdata_external
+      # For postgres:
+      # database: production
 
-  
+      schema: trips_data_all
 
+      # loaded_at_field: record_loaded_at
+      tables:
+        - name: green_tripdata_external
+        - name: yellow_tripdata_external
+         # freshness:
+           # error_after: {count: 6, period: hour}
