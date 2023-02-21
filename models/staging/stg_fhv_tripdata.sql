@@ -1,12 +1,12 @@
 {{ config(materialized='view') }}
 
-with tripdata as 
-(
-  select *,
-    row_number() over(partition by dispatching_base_num, pickup_datetime) as rn
-  from {{ source('staging','fhv_tripdata_external') }}
-  where dispatching_base_num is not null 
-)
+-- with tripdata as 
+-- (
+--  select *,
+--    row_number() over(partition by dispatching_base_num, pickup_datetime) as rn
+--  from {{ source('staging','fhv_tripdata_external') }}
+--  where dispatching_base_num is not null 
+-- )
 
 select
     -- identifiers
@@ -22,8 +22,8 @@ select
     -- trip info
     sr_flag
 
-from tripdata
-where rn = 1
+from {{ source('staging','fhv_tripdata_external') }}
+where dispatching_base_num is not null 
 
 -- dbt build --m <model.sql> --var 'is_test_run: false'
 {% if var('is_test_run', default=true) %}
